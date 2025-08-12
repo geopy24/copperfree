@@ -1,0 +1,40 @@
+/* Gesamte Seite: Schriftart, Abstand, Hintergrundfarbe */
+body {
+    font-family: Arial, sans-serif; /* Schriftart */
+    padding: 20px; /* Innenabstand */
+    background: #f4f4f4; /* Hellgrauer Hintergrund */
+}
+
+/* Überschrift zentrieren */
+h1 {
+    text-align: center;
+}
+
+/* Suchfeld gestalten */
+input {
+    display: block; /* Eigenen Block einnehmen (untereinander) */
+    margin: 0 auto 20px auto; /* Zentriert + Abstand nach unten */
+    padding: 10px; /* Innenabstand */
+    width: 80%; /* Breite des Suchfelds */
+    font-size: 16px; /* Schriftgröße */
+}
+
+/* Tabelle gestalten */
+table {
+    border-collapse: collapse; /* Rahmen zusammenziehen (keine Doppelstriche) */
+    margin: 0 auto; /* Tabelle zentrieren */
+    background: white; /* Weißer Hintergrund */
+    width: 80%; /* Tabellenbreite */
+}
+
+/* Tabellenzellen */
+th, td {
+    border: 1px solid #ccc; /* Dünner grauer Rahmen */
+    padding: 10px; /* Innenabstand */
+    text-align: left; /* Text linksbündig */
+}
+
+/* Tabellenkopf (Überschriften) */
+th {
+    background: #eee; /* Hellgrauer Hintergrund */
+}
