@@ -1,12 +1,13 @@
-Lebensmittel, Kupferwert, Kategorie
-apfel,"1,32",frucht
-haselnuss,"5,20093",nuss
-birne,"1,0",frucht
-zucchini,"0,732",gemüse
-mandel,"6,09",nuss
-gurke,"0,6",gemüse
-kirsche,"2,12",frucht
-kürbis,"3,95",gemüse
-erdnuss,"4,732",nuss
+Lebensmittel; Kupferwert; Kategorie
+apfel;"1,32";frucht
+haselnuss;"5,20093";nuss
+birne;"1,0";frucht
+zucchini;"0,732";gemüse
+mandel;"6,09";nuss
+gurke;"0,6";gemüse
+kirsche;"2,12";frucht
+kürbis;"3,95";gemüse
+erdnuss;"4,732";nuss
+
 
 
