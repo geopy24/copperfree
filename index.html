@@ -1,25 +1,345 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CSV-Tabelle</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kupferwerte Lebensmittel</title>
+    <style>
+        /* CSS - Das Styling für deine App */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Suchfeld Styling - 50px hoch, komplett abgerundet */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 50px;
+            border-radius: 25px; /* Die Hälfte der Höhe für perfekte Rundung */
+            border: 1px solid #ddd;
+            padding: 0 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #333;
+        }
+
+        /* Filter-Buttons Container */
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Filter-Button Styling - 30px hoch, komplett abgerundet */
+        .filter-btn {
+            height: 30px;
+            border-radius: 15px; /* Die Hälfte der Höhe */
+            border: 1px solid #000;
+            background: white;
+            color: black;
+            padding: 0 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        /* Aktiver Filter-Button - schwarzer Hintergrund, weiße Schrift */
+        .filter-btn.active {
+            background: black;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Tabellen-Container */
+        .table-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        /* Tabellen-Styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .data-table td {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        /* Linksbündig für Lebensmittel */
+        .data-table td:first-child {
+            text-align: left;
+        }
+
+        /* Rechtsbündig für Kupferwerte */
+        .data-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: #666;
+        }
+
+        /* Loading und Error States */
+        .loading, .error, .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error {
+            color: #d00;
+        }
+
+        /* Responsive Design für sehr kleine Bildschirme */
+        @media (max-width: 400px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .filter-btn {
+                min-width: 70px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>CSV-geladene Tabelle</h2>
-    <input type="text" id="searchInput" placeholder="Suche..." onkeyup="searchTable()" />
+    <!-- HTML - Das Grundgerüst deiner App -->
+    
+    <div class="container">
+        <!-- Suchfeld -->
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Lebensmittel suchen..."
+                id="searchInput"
+            >
+        </div>
 
-    <table id="dataTable">
-        <thead>
-            <tr id="tableHeader"></tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+        <!-- Filter-Buttons -->
+        <div class="filter-container">
+            <button class="filter-btn" data-category="frucht">Frucht</button>
+            <button class="filter-btn" data-category="nuss">Nuss</button>
+            <button class="filter-btn" data-category="gemüse">Gemüse</button>
+        </div>
 
-    <!-- Papa Parse CSV-Library -->
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script src="script.js"></script>
+        <!-- Tabelle -->
+        <div class="table-container">
+            <table class="data-table" id="dataTable">
+                <!-- Die Tabelle wird von JavaScript gefüllt -->
+            </table>
+        </div>
+
+        <!-- Status-Nachrichten -->
+        <div class="loading" id="loadingMessage">Lade Daten...</div>
+        <div class="error" id="errorMessage" style="display: none;">Fehler beim Laden der Daten</div>
+        <div class="no-results" id="noResultsMessage" style="display: none;">Keine Ergebnisse gefunden</div>
+    </div>
+
+    <script>
+        // JavaScript - Die Logik deiner App
+        
+        // Globale Variablen - hier speichern wir alle Daten und den aktuellen Status
+        let allData = [];           // Alle geladenen Daten aus der CSV
+        let filteredData = [];      // Die gefilterten Daten
+        let activeFilters = [];     // Welche Filter sind gerade aktiv?
+        
+        // DOM-Elemente - Verbindungen zu HTML-Elementen
+        const searchInput = document.getElementById('searchInput');
+        const dataTable = document.getElementById('dataTable');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // Event Listeners - "Lauscher" für Benutzer-Aktionen
+        searchInput.addEventListener('input', handleSearch);
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', handleFilterClick);
+        });
+
+        // Funktion: CSV-Daten laden und verarbeiten
+        async function loadCSVData() {
+            try {
+                // Hier musst du später den Pfad zu deiner CSV-Datei anpassen
+                const response = await fetch('daten.csv');
+                
+                if (!response.ok) {
+                    throw new Error('CSV-Datei konnte nicht geladen werden');
+                }
+                
+                const csvText = await response.text();
+                const parsedData = parseCSV(csvText);
+                
+                allData = parsedData;
+                filteredData = [...allData]; // Kopie aller Daten
+                
+                hideAllMessages();
+                renderTable(filteredData);
+                
+            } catch (error) {
+                console.error('Fehler beim Laden der CSV:', error);
+                showError();
+            }
+        }
+
+        // Funktion: CSV-Text in JavaScript-Array umwandeln
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const data = [];
+            
+            // Erste Zeile überspringen (Kopfzeile)
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) {
+                    // Semikolon als Trenner
+                    const columns = line.split(';');
+                    
+                    if (columns.length >= 3) {
+                        data.push({
+                            lebensmittel: columns[0].trim(),
+                            kupferwert: columns[1].trim(),
+                            kategorie: columns[2].trim().toLowerCase()
+                        });
+                    }
+                }
+            }
+            
+            return data;
+        }
+
+        // Funktion: Tabelle mit Daten füllen
+        function renderTable(data) {
+            if (data.length === 0) {
+                dataTable.style.display = 'none';
+                showNoResults();
+                return;
+            }
+
+            dataTable.style.display = 'table';
+            dataTable.innerHTML = '';
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.lebensmittel}</td>
+                    <td>${item.kupferwert}</td>
+                `;
+                dataTable.appendChild(row);
+            });
+
+            hideAllMessages();
+        }
+
+        // Funktion: Suche durchführen
+        function handleSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // Filtere die Daten basierend auf Suchbegriff und aktiven Filtern
+            let results = allData;
+            
+            // Erst nach Kategorien filtern (wenn Filter aktiv sind)
+            if (activeFilters.length > 0) {
+                results = results.filter(item => 
+                    activeFilters.includes(item.kategorie)
+                );
+            }
+            
+            // Dann nach Suchbegriff filtern
+            if (searchTerm) {
+                results = results.filter(item =>
+                    item.lebensmittel.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            filteredData = results;
+            renderTable(filteredData);
+        }
+
+        // Funktion: Filter-Button Klick behandeln
+        function handleFilterClick(event) {
+            const button = event.target;
+            const category = button.dataset.category;
+            
+            // Button aktivieren/deaktivieren
+            button.classList.toggle('active');
+            
+            // Filter-Array aktualisieren
+            if (activeFilters.includes(category)) {
+                // Filter entfernen
+                activeFilters = activeFilters.filter(f => f !== category);
+            } else {
+                // Filter hinzufügen
+                activeFilters.push(category);
+            }
+            
+            // Suche neu durchführen mit aktualisierten Filtern
+            handleSearch();
+        }
+
+        // Hilfsfunktionen für Status-Nachrichten
+        function showError() {
+            hideAllMessages();
+            errorMessage.style.display = 'block';
+        }
+
+        function showNoResults() {
+            hideAllMessages();
+            noResultsMessage.style.display = 'block';
+        }
+
+        function hideAllMessages() {
+            loadingMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            noResultsMessage.style.display = 'none';
+        }
+
+        // App starten - wird ausgeführt, sobald die Seite geladen ist
+        loadCSVData();
+    </script>
 </body>
 </html>
-
