@@ -1,54 +1,124 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2113.65">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test-Tabelle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"] {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 200px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            cursor: pointer;
+            background-color: #f4f4f4;
+        }
+        th:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt; &lt;!-- Sagt dem Browser: Das ist ein HTML5-Dokument --&gt;</p>
-<p class="p1">&lt;html lang="de"&gt; &lt;!-- Sprache auf Deutsch setzen --&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt; &lt;!-- Zeichencodierung, damit Umlaute korrekt angezeigt werden --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt; &lt;!-- Wichtig für mobile Darstellung --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Freundesliste&lt;/title&gt; &lt;!-- Titel der Seite (oben im Browser-Tab) --&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Verknüpft die CSS-Datei für das Design --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="style.css"&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Hauptüberschrift --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Meine Freundesliste&lt;/h1&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Eingabefeld für die Suche --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="suche" placeholder="Suchen..."&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Tabelle mit den Daten --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;table id="freundesTabelle"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;thead&gt; &lt;!-- Tabellenkopf --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Name&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Alter&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Beruf&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;tbody&gt; &lt;!-- Tabelleninhalt --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;&lt;td&gt;Anna&lt;/td&gt;&lt;td&gt;29&lt;/td&gt;&lt;td&gt;Designer&lt;/td&gt;&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;&lt;td&gt;Ben&lt;/td&gt;&lt;td&gt;35&lt;/td&gt;&lt;td&gt;Entwickler&lt;/td&gt;&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;&lt;td&gt;Clara&lt;/td&gt;&lt;td&gt;27&lt;/td&gt;&lt;td&gt;Architektin&lt;/td&gt;&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;&lt;td&gt;David&lt;/td&gt;&lt;td&gt;32&lt;/td&gt;&lt;td&gt;Lehrer&lt;/td&gt;&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/table&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Verknüpft die JavaScript-Datei, die die Suche steuert --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="script.js"&gt;&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <h2>Sortier- und Suchbare Tabelle</h2>
+    <input type="text" id="searchInput" placeholder="Suche..." onkeyup="searchTable()" />
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Name &#x25B2;&#x25BC;</th>
+                <th onclick="sortTable(1)">Alter &#x25B2;&#x25BC;</th>
+                <th onclick="sortTable(2)">Stadt &#x25B2;&#x25BC;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Anna</td><td>28</td><td>Berlin</td></tr>
+            <tr><td>Bernd</td><td>35</td><td>Hamburg</td></tr>
+            <tr><td>Clara</td><td>22</td><td>München</td></tr>
+            <tr><td>Dieter</td><td>40</td><td>Köln</td></tr>
+            <tr><td>Eva</td><td>30</td><td>Frankfurt</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Suchfunktion: Filtert Zeilen, die nicht zum Suchbegriff passen
+        function searchTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("dataTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) { // i=1, weil i=0 die Kopfzeile ist
+                const rowText = tr[i].textContent.toLowerCase();
+                if (rowText.indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        // Sortierfunktion: Sortiert die Tabelle nach der angegebenen Spalte (0,1,2)
+        function sortTable(colIndex) {
+            const table = document.getElementById("dataTable");
+            let switching = true;
+            let dir = "asc"; // aufsteigend
+            let switchcount = 0;
+
+            while (switching) {
+                switching = false;
+                const rows = table.rows;
+
+                for (let i = 1; i < rows.length - 1; i++) {
+                    let shouldSwitch = false;
+                    let x = rows[i].getElementsByTagName("TD")[colIndex];
+                    let y = rows[i + 1].getElementsByTagName("TD")[colIndex];
+
+                    // Prüfen ob numerisch oder Textsortierung
+                    let xContent = x.textContent || x.innerText;
+                    let yContent = y.textContent || y.innerText;
+
+                    if (!isNaN(parseFloat(xContent)) && !isNaN(parseFloat(yContent))) {
+                        // Numerische Sortierung
+                        if (dir === "asc" ? (parseFloat(xContent) > parseFloat(yContent)) : (parseFloat(xContent) < parseFloat(yContent))) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        // Textsortierung
+                        if (dir === "asc" ? (xContent.toLowerCase() > yContent.toLowerCase()) : (xContent.toLowerCase() < yContent.toLowerCase())) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
