@@ -20,6 +20,8 @@ th, td {
 th {
     cursor: pointer;
     background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
 }
 th:hover {
     background-color: #e0e0e0;
