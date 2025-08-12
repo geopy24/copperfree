@@ -1,55 +1,71 @@
-function searchTable() {
-    const input = document.getElementById("searchInput");
-    const filter = input.value.toLowerCase();
-    const table = document.getElementById("dataTable");
-    const tr = table.getElementsByTagName("tr");
+// CSV laden und Tabelle füllen
+fetch('daten.csv')
+    .then(response => response.text())
+    .then(csvText => {
+        const rows = csvText.trim().split('\n').map(line => {
+            // Zerlegen am Komma, aber vorher Komma in Zahlen behandeln
+            const parts = line.split(',').map(cell => cell.trim());
+            return parts;
+        });
 
-    for (let i = 1; i < tr.length; i++) {
-        const rowText = tr[i].textContent.toLowerCase();
-        tr[i].style.display = rowText.indexOf(filter) > -1 ? "" : "none";
+        const header = rows[0];
+        const data = rows.slice(1);
+
+        // Tabellenkopf setzen
+        const headerRow = document.getElementById("tableHeader");
+        header.forEach((col, index) => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            th.onclick = () => sortTable(index);
+            headerRow.appendChild(th);
+        });
+
+        // Tabellenkörper setzen
+        const tbody = document.getElementById("tableBody");
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            row.forEach(cell => {
+                const td = document.createElement("td");
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+    });
+
+// Suchfunktion
+function searchTable() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.getElementById("tableBody").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        const rowText = rows[i].textContent.toLowerCase();
+        rows[i].style.display = rowText.includes(input) ? "" : "none";
     }
 }
 
+// Sortierfunktion
 function sortTable(colIndex) {
-    const table = document.getElementById("dataTable");
-    let switching = true;
-    let dir = "asc";
-    let switchcount = 0;
+    const tbody = document.getElementById("tableBody");
+    const rowsArray = Array.from(tbody.rows);
+    let dir = tbody.getAttribute("data-sort-dir") === "asc" ? "desc" : "asc";
+    tbody.setAttribute("data-sort-dir", dir);
 
-    while (switching) {
-        switching = false;
-        const rows = table.rows;
+    rowsArray.sort((a, b) => {
+        let aText = a.cells[colIndex].textContent.trim();
+        let bText = b.cells[colIndex].textContent.trim();
 
-        for (let i = 1; i < rows.length - 1; i++) {
-            let shouldSwitch = false;
-            let x = rows[i].getElementsByTagName("TD")[colIndex];
-            let y = rows[i + 1].getElementsByTagName("TD")[colIndex];
-
-            let xContent = x.textContent || x.innerText;
-            let yContent = y.textContent || y.innerText;
-
-            if (!isNaN(parseFloat(xContent)) && !isNaN(parseFloat(yContent))) {
-                if (dir === "asc" ? parseFloat(xContent) > parseFloat(yContent) : parseFloat(xContent) < parseFloat(yContent)) {
-                    shouldSwitch = true;
-                    break;
-                }
-            } else {
-                if (dir === "asc" ? xContent.toLowerCase() > yContent.toLowerCase() : xContent.toLowerCase() < yContent.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            switchcount++;
+        // Spalte 1 als Zahl mit Komma behandeln
+        if (colIndex === 1) {
+            aText = parseFloat(aText.replace(',', '.'));
+            bText = parseFloat(bText.replace(',', '.'));
+            return dir === "asc" ? aText - bText : bText - aText;
         } else {
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
+            return dir === "asc"
+                ? aText.localeCompare(bText)
+                : bText.localeCompare(aText);
         }
-    }
+    });
+
+    // Neu sortierte Zeilen anhängen
+    rowsArray.forEach(row => tbody.appendChild(row));
 }
