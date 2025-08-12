@@ -3,28 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Test-Tabelle</title>
+    <title>CSV-Tabelle</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h2>Sortier- und Suchbare Tabelle</h2>
+    <h2>CSV-geladene Tabelle</h2>
     <input type="text" id="searchInput" placeholder="Suche..." onkeyup="searchTable()" />
 
     <table id="dataTable">
         <thead>
-            <tr>
-                <th onclick="sortTable(0)">Name &#x25B2;&#x25BC;</th>
-                <th onclick="sortTable(1)">Alter &#x25B2;&#x25BC;</th>
-                <th onclick="sortTable(2)">Stadt &#x25B2;&#x25BC;</th>
-            </tr>
+            <tr id="tableHeader"></tr>
         </thead>
-        <tbody>
-            <tr><td>Anna</td><td>28</td><td>Berlin</td></tr>
-            <tr><td>Bernd</td><td>35</td><td>Hamburg</td></tr>
-            <tr><td>Clara</td><td>22</td><td>München</td></tr>
-            <tr><td>Dieter</td><td>40</td><td>Köln</td></tr>
-            <tr><td>Eva</td><td>30</td><td>Frankfurt</td></tr>
-        </tbody>
+        <tbody id="tableBody"></tbody>
     </table>
 
     <script src="script.js"></script>
