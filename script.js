@@ -1,17 +1,14 @@
-// CSV laden und Tabelle füllen
-fetch('daten.csv')
-    .then(response => response.text())
-    .then(csvText => {
-        const rows = csvText.trim().split('\n').map(line => {
-            // Zerlegen am Komma, aber vorher Komma in Zahlen behandeln
-            const parts = line.split(',').map(cell => cell.trim());
-            return parts;
-        });
-
+// CSV laden und parsen
+Papa.parse('daten.csv', {
+    download: true,
+    delimiter: ",", // Spaltentrenner
+    skipEmptyLines: true,
+    complete: function(results) {
+        const rows = results.data;
         const header = rows[0];
         const data = rows.slice(1);
 
-        // Tabellenkopf setzen
+        // Kopfzeile setzen
         const headerRow = document.getElementById("tableHeader");
         header.forEach((col, index) => {
             const th = document.createElement("th");
@@ -20,7 +17,7 @@ fetch('daten.csv')
             headerRow.appendChild(th);
         });
 
-        // Tabellenkörper setzen
+        // Körper setzen
         const tbody = document.getElementById("tableBody");
         data.forEach(row => {
             const tr = document.createElement("tr");
@@ -31,7 +28,8 @@ fetch('daten.csv')
             });
             tbody.appendChild(tr);
         });
-    });
+    }
+});
 
 // Suchfunktion
 function searchTable() {
@@ -54,18 +52,17 @@ function sortTable(colIndex) {
         let aText = a.cells[colIndex].textContent.trim();
         let bText = b.cells[colIndex].textContent.trim();
 
-        // Spalte 1 als Zahl mit Komma behandeln
-        if (colIndex === 1) {
-            aText = parseFloat(aText.replace(',', '.'));
-            bText = parseFloat(bText.replace(',', '.'));
-            return dir === "asc" ? aText - bText : bText - aText;
-        } else {
-            return dir === "asc"
-                ? aText.localeCompare(bText)
-                : bText.localeCompare(aText);
+        // Versuchen, als Zahl zu sortieren
+        let aNum = parseFloat(aText.replace(',', '.'));
+        let bNum = parseFloat(bText.replace(',', '.'));
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+            return dir === "asc" ? aNum - bNum : bNum - aNum;
         }
+        // Sonst als Text sortieren
+        return dir === "asc"
+            ? aText.localeCompare(bText)
+            : bText.localeCompare(aText);
     });
 
-    // Neu sortierte Zeilen anhängen
     rowsArray.forEach(row => tbody.appendChild(row));
 }
